@@ -25,6 +25,6 @@
 ## Options
 
   * jsonoutput - output destination folder
-  * folder - the director location with `.md` files you would like to include, see example
+  * folder - the directory location with `.md` files you would like to include, see example
 
 
