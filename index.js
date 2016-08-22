@@ -1,5 +1,5 @@
 
-var fs, path, yamlFront, md, Finder, readdir, util, moment, readdirp, readDir;
+var fs, path, yamlFront, md, util, moment, readDir;
 
 fs        = require('fs');
 path      = require('path');
@@ -10,16 +10,19 @@ moment  = require ("moment");
 readDir = require('readdir');
 
 module.exports = function(opts) {
-  var WebriqRootsExtension, folder;
+  var WebriqRootsExtension, folder, jsonoutput;
   opts || (opts = {});
   folder = opts.folder || ['posts/**.md'];
+  jsonoutput = opts.jsonoutput || "data";
   helperName = opts.name || folder;
 
   return WebriqRootsExtension = (function() {
 
     function WebriqRootsExtension() {
 
-        var result, roots, pages, filesArray, ctr, files, _url, output;
+        var result, roots, pages, filesArray, ctr, files, _url, output, buff;
+
+        buf = new Buffer(1024);
 
         roots = this;
 
@@ -44,7 +47,7 @@ module.exports = function(opts) {
 
           _url = files.replace(/\.[^\.]+$/, '.html');
 
-          console.log(_url);
+          // console.log(_url);
 
           output = yamlFront.loadFront(filesArray[i]);
 
@@ -64,9 +67,50 @@ module.exports = function(opts) {
 
         } // end of for loop
 
-        roots.writeFile('data/tipuesearch_content.json', JSON.stringify(result), 'utf8', roots.callback);
+        roots.stat(jsonoutput + '/tipuesearch_content.json', function(err, stat){
+          if (err == null){
+            roots.open(jsonoutput + '/tipuesearch_content.json', 'r+', function(err, fd){
+              if (err){
+                return roots.callError('Error Openning File', err);
+              }
+              roots.read(fd, buf, 0, buf.length, 0, function(err, bytes){
+                if (err){
+                  return roots.callError('Error Reading', err);
+                }
+                else{
+                  roots.writeFile(jsonoutput + '/tipuesearch_content.json', JSON.stringify(result), 'utf8', roots.callback);
+                }
+
+              }) // end roots.read
+            })
+
+          }
+          else if(err.code == 'ENOENT') {
+            roots.writeFile(jsonoutput + '/tipuesearch_content.json', JSON.stringify(result), 'utf8', roots.callback);
+          }
+
+          else {
+            return roots.callError('Some other error: ', err.code);
+          }
+
+
+        }) // end fs stat
+
+
 
     }
+
+    WebriqRootsExtension.prototype.open = function(path, flags, callback) {
+      fs.open(path, flags, callback)
+    }
+
+    WebriqRootsExtension.prototype.read = function(fd, buffer, offset, length, position, callback) {
+      fs.read(fd, buffer, offset, length, position, callback)
+    }
+
+    WebriqRootsExtension.prototype.stat = function(file, callback) {
+      fs.stat(file, callback);
+    };
 
     WebriqRootsExtension.prototype.readDir = function(path, filter){
       return readDir.readSync(path, filter);

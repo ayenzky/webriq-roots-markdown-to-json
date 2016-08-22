@@ -18,10 +18,12 @@
 ## Example
 
   ````
-  roots_markdown_to_json(folder:['posts/**.md', posts/**.md])
+  roots_markdown_to_json(jsonoutput: "data", folder:['posts/**.md', posts/**.md])
 
   ````
 
-  filter - the folder with `.md` files you would like to include see example.
+
+  * jsonoutput - output destination folder
+  * filter - the folder with `.md` files you would like to include see example
 
 
