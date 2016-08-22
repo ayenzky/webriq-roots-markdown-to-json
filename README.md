@@ -18,7 +18,7 @@
 ## Example
 
   ````
-  roots_markdown_to_json(jsonoutput: "data", folder:['posts/**.md', posts/**.md])
+  roots_markdown_to_json(jsonoutput: "data", folder:['posts/**.md', page/**.md])
 
   ````
 
