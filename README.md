@@ -13,7 +13,7 @@
    roots_markdown_to_json = require 'webriq-roots-markdown-to-json'
 
    module.exports =
-     extensions: [roots_markdown_to_json(filter)]
+     extensions: [roots_markdown_to_json(options)]
    ```
 ## Example
 
@@ -22,8 +22,9 @@
 
   ````
 
+## Options
 
   * jsonoutput - output destination folder
-  * filter - the folder with `.md` files you would like to include see example
+  * folder - the director location with `.md` files you would like to include, see example
 
 
