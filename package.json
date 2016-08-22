@@ -1,0 +1,27 @@
+{
+  "name": "webriq-roots-markdown-to-json",
+  "version": "1.0.0",
+  "description": "compile all markdown to json",
+  "main": "index.js",
+  "scripts": {
+    "test": "console.log public/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayenzky/webriq-roots-markdown-to-json.git"
+  },
+  "keywords": [
+    "markdown",
+    "to",
+    "json"
+  ],
+  "author": "allen.support",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.14.1",
+    "node-markdown": "^0.1.1",
+    "readdir": "0.0.13",
+    "util": "^0.10.3",
+    "yaml-front-matter": "^3.4.0"
+  }
+}
