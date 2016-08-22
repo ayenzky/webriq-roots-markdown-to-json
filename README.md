@@ -4,9 +4,9 @@
 
 ## Installation
 
-*  make sure you're in your roots project directory
-*  `npm install webriq-roots-markdown-to-json --save`
-*  modify your `app.coffee` file to include the extension
+  *  make sure you're in your roots project directory
+  *  `npm install webriq-roots-markdown-to-json --save`
+  *  modify your `app.coffee` file to include the extension
 
 
    ```coffee
