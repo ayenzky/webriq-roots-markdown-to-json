@@ -1,5 +1,5 @@
 
-var fs, path, yamlFront, md, util, moment, readDir;
+var fs, path, yamlFront, md, util, moment, readDir, sortBy;
 
 fs        = require('fs');
 path      = require('path');
@@ -8,12 +8,13 @@ md = require("node-markdown").Markdown;
 util    = require ("util");
 moment  = require ("moment");
 readDir = require('readdir');
+sortBy = require('sort-by');
 
 module.exports = function(opts) {
   var WebriqRootsExtension, folder, jsonoutput;
   opts || (opts = {});
-  folder = opts.folder || ['posts/**.md'];
-  jsonoutput = opts.jsonoutput || "data";
+  folder = opts.folder || ['*/**.md'];
+  jsonoutput = opts.jsonoutput || "data/tipuesearch_content.json";
   helperName = opts.name || folder;
 
   return WebriqRootsExtension = (function() {
@@ -30,11 +31,15 @@ module.exports = function(opts) {
 
         pages = [];
 
+
+
         this.callback = function(err){
           if (err){
             return roots.callError(err)
           }
         }
+
+
 
         filesArray = roots.readDir('./', folder);
 
@@ -45,31 +50,48 @@ module.exports = function(opts) {
 
           files = filesArray[i];
 
-          _url = files.replace(/\.[^\.]+$/, '.html');
+          _url = roots.replace(files);
 
           // console.log(_url);
 
           output = yamlFront.loadFront(filesArray[i]);
 
-          this.items = function(title, shortdesc, tags, url){
+
+
+
+          // console.log(output);
+
+          this.items = function(banner, title, shortdesc, tags, date, url){
+            this.banner = banner;
             this.title = title;
             this.text  = shortdesc;
             this.tags   = tags;
+            this.date   = date;
             this.url   = url;
 
           }
 
-          var itemObject = new this.items (output.title, output.shortdesc, output.categories, _url);
+          var itemObject = new this.items (output.banner, output.title, output.shortdesc, output.categories, output.date, _url.replace(".html", ""));
+
+
 
           pages.push(itemObject)
 
+
+          pages.sort(sortBy('-date', 'DESC'));
+
+
           result.pages = pages;
+
+
 
         } // end of for loop
 
-        roots.stat(jsonoutput + '/tipuesearch_content.json', function(err, stat){
+
+
+        roots.stat(jsonoutput, function(err, stat){
           if (err == null){
-            roots.open(jsonoutput + '/tipuesearch_content.json', 'r+', function(err, fd){
+            roots.open(jsonoutput, 'r+', function(err, fd){
               if (err){
                 return roots.callError('Error Openning File', err);
               }
@@ -78,7 +100,7 @@ module.exports = function(opts) {
                   return roots.callError('Error Reading', err);
                 }
                 else{
-                  roots.writeFile(jsonoutput + '/tipuesearch_content.json', JSON.stringify(result), 'utf8', roots.callback);
+                  roots.writeFile(jsonoutput, JSON.stringify(result), 'utf8', roots.callback);
                 }
 
               }) // end roots.read
@@ -86,7 +108,7 @@ module.exports = function(opts) {
 
           }
           else if(err.code == 'ENOENT') {
-            roots.writeFile(jsonoutput + '/tipuesearch_content.json', JSON.stringify(result), 'utf8', roots.callback);
+            roots.writeFile(jsonoutput, JSON.stringify(result), 'utf8', roots.callback);
           }
 
           else {
@@ -97,6 +119,11 @@ module.exports = function(opts) {
         }) // end fs stat
 
 
+
+    }
+
+    WebriqRootsExtension.prototype.replace = function(fileurl){
+      return fileurl.replace(/\.[^\.]+$/, '.html');
 
     }
 
