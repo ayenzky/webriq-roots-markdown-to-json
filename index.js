@@ -61,17 +61,18 @@ module.exports = function(opts) {
 
           // console.log(output);
 
-          this.items = function(banner, title, shortdesc, tags, date, url){
+          this.items = function(banner, title, shortdesc, writer, tags, date, url){
             this.banner = banner;
             this.title = title;
             this.text  = shortdesc;
+            this.writer  = writer;
             this.tags   = tags;
             this.date   = date;
             this.url   = url;
 
           }
 
-          var itemObject = new this.items (output.banner, output.title, output.shortdesc, output.categories, output.date, _url.replace(".html", ""));
+          var itemObject = new this.items (output.banner, output.title, output.shortdesc, output.writer, output.categories, output.date, _url.replace(".html", ""));
 
 
 

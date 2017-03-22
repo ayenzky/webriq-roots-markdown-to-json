@@ -1,6 +1,6 @@
 {
   "name": "webriq-roots-markdown-to-json",
-  "version": "1.0.9",
+  "version": "1.0.13",
   "description": "compile all markdown to json",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,6 @@
   "author": "allen.support",
   "license": "ISC",
   "dependencies": {
-    "array-sort-by": "^1.0.1",
     "moment": "^2.14.1",
     "node-markdown": "^0.1.1",
     "readdir": "0.0.13",
