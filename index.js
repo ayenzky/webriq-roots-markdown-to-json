@@ -14,6 +14,8 @@ module.exports = function(opts) {
   var WebriqRootsExtension, folder, jsonoutput;
   opts || (opts = {});
   folder = opts.folder || ['*/**.md'];
+  sort = opts.sort || "-date";
+  by = opts.by || "DESC";
   jsonoutput = opts.jsonoutput || "data/tipuesearch_content.json";
   helperName = opts.name || folder;
 
@@ -61,25 +63,25 @@ module.exports = function(opts) {
 
           // console.log(output);
 
-          this.items = function(banner, title, shortdesc, writer, tags, date, url){
+          this.items = function(banner, title, shortdesc, author, categories, date, url){
             this.banner = banner;
             this.title = title;
-            this.text  = shortdesc;
-            this.writer  = writer;
-            this.tags   = tags;
+            this.shortdesc  = shortdesc;
+            this.author  = author;
+            this.categories   = categories;
             this.date   = date;
-            this.url   = url;
+            this.slug   = url;
 
           }
 
-          var itemObject = new this.items (output.banner, output.title, output.shortdesc, output.writer, output.categories, output.date, _url.replace(".html", ""));
+          var itemObject = new this.items (output.banner, output.title, output.shortdesc, output.author, output.categories, output.date, _url.replace(".html", ""));
 
 
 
           pages.push(itemObject)
 
 
-          pages.sort(sortBy('-date', 'DESC'));
+          pages.sort(sortBy(''+ sort +'', ''+ by +''));
 
 
           result.pages = pages;
